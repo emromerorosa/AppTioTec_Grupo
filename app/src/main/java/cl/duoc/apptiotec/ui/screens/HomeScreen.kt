@@ -1,26 +1,68 @@
 package cl.duoc.apptiotec.ui.screens
 
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.Composable
-import cl.duoc.apptiotec.ui.utils.obtenerWindowSizeClass
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import cl.duoc.apptiotec.navigation.Screen
+import cl.duoc.apptiotec.viewmodel.MainViewModel
+import kotlinx.coroutines.launch
 
-// Esta es la pantalla "principal". No dibuja nada por sí misma:
-// solo mira el tamaño de la pantalla y llama a la versión que corresponde.
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
-    // Pedimos el tamaño de la pantalla (función que creamos en WindowSizeUtils).
-    val windowSizeClass = obtenerWindowSizeClass()
+fun HomeScreen(
+    navController: NavController,
+    viewModel: MainViewModel
+) {
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-    // "when" funciona como un "si... entonces..." con varias opciones.
-    // Revisamos el ANCHO de la pantalla (widthSizeClass).
-    when (windowSizeClass.widthSizeClass) {
-        // Pantalla angosta (celular): diseño Compacto.
-        WindowWidthSizeClass.Compact -> HomeScreenCompacta()
-
-        // Pantalla mediana (tablet pequeña o celular plegado): diseño Mediano.
-        WindowWidthSizeClass.Medium -> HomeScreenMediana()
-
-        // Cualquier otro caso es una pantalla grande (Expanded): diseño Expandido.
-        else -> HomeScreenExpandida()
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                Text(text = "Menú", modifier = Modifier.padding(16.dp))
+                NavigationDrawerItem(
+                    label = { Text(text = "Ir a Perfil") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        viewModel.navigateTo(Screen.Profile)
+                    }
+                )
+            }
+        }
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Pantalla Home") },
+                    navigationIcon = {
+                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                            Icon(imageVector = Icons.Default.Menu, contentDescription = "Menú")
+                        }
+                    }
+                )
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(text = "¡Bienvenido a la Página de Inicio (MVVM)!")
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = { viewModel.navigateTo(Screen.Settings) }) {
+                    Text(text = "Ir a Configuración")
+                }
+            }
+        }
     }
 }

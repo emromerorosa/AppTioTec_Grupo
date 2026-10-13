@@ -56,4 +56,10 @@ dependencies {
     // Window Size Classes: sirve para saber si la pantalla es Compacta, Mediana o Expandida
     implementation("androidx.compose.material3:material3-window-size-class")
 
+    // Navegación Jetpack Compose y ViewModel
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-rc02")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.compose.material:material-icons-extended:1.6.0")
 }

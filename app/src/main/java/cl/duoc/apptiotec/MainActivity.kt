@@ -4,24 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import cl.duoc.apptiotec.navigation.NavigationEvent
+import androidx.navigation.navArgument
 import cl.duoc.apptiotec.navigation.Screen
-import cl.duoc.apptiotec.ui.screens.HomeScreen
-import cl.duoc.apptiotec.ui.screens.ProfileScreen
-import cl.duoc.apptiotec.ui.screens.SettingsScreen
+import cl.duoc.apptiotec.ui.FormularioScreen
+import cl.duoc.apptiotec.ui.ResultadoScreen
 import cl.duoc.apptiotec.ui.theme.AppTioTec_GrupoRJTheme
-import cl.duoc.apptiotec.viewmodel.MainViewModel
-import kotlinx.coroutines.flow.collectLatest
+import cl.duoc.apptiotec.viewmodel.UsuarioViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,44 +28,44 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val viewModel: MainViewModel = viewModel()
                     val navController = rememberNavController()
 
-                    // Escuchar eventos de navegación reactivos
-                    LaunchedEffect(key1 = Unit) {
-                        viewModel.navigationEvents.collectLatest { event ->
-                            when (event) {
-                                is NavigationEvent.NavigateTo -> {
-                                    navController.navigate(event.route.route) {
-                                        event.popupToRoute?.let {
-                                            popUpTo(it.route) {
-                                                inclusive = event.inclusive
-                                            }
-                                        }
-                                        launchSingleTop = event.singleTop
-                                    }
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.Formulario.route
+                    ) {
+                        composable(Screen.Formulario.route) {
+                            val usuarioViewModel: UsuarioViewModel = viewModel()
+                            FormularioScreen(
+                                viewModel = usuarioViewModel,
+                                onNavigateToResult = { nombre, correo, direccion ->
+                                    navController.navigate(
+                                        Screen.Resultado.createRoute(nombre, correo, direccion)
+                                    )
                                 }
-                                is NavigationEvent.PopBackStack -> navController.popBackStack()
-                                is NavigationEvent.NavigateUp -> navController.navigateUp()
-                            }
+                            )
                         }
-                    }
 
-                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        NavHost(
-                            navController = navController,
-                            startDestination = Screen.Home.route,
-                            modifier = Modifier.padding(innerPadding)
-                        ) {
-                            composable(Screen.Home.route) {
-                                HomeScreen(navController = navController, viewModel = viewModel)
-                            }
-                            composable(Screen.Profile.route) {
-                                ProfileScreen(navController = navController, viewModel = viewModel)
-                            }
-                            composable(Screen.Settings.route) {
-                                SettingsScreen(navController = navController, viewModel = viewModel)
-                            }
+                        composable(
+                            route = Screen.Resultado.route,
+                            arguments = listOf(
+                                navArgument("nombre") { type = NavType.StringType },
+                                navArgument("correo") { type = NavType.StringType },
+                                navArgument("direccion") { type = NavType.StringType }
+                            )
+                        ) { backStackEntry ->
+                            val nombre = backStackEntry.arguments?.getString("nombre") ?: ""
+                            val correo = backStackEntry.arguments?.getString("correo") ?: ""
+                            val direccion = backStackEntry.arguments?.getString("direccion") ?: ""
+
+                            ResultadoScreen(
+                                nombre = nombre,
+                                correo = correo,
+                                direccion = direccion,
+                                onVolverClick = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
                     }
                 }

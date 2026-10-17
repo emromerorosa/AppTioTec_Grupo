@@ -1,8 +1,12 @@
 package cl.duoc.apptiotec.navigation
 
-// Sealed class para definir las rutas de navegación de forma segura
 sealed class Screen(val route: String) {
-    data object Home : Screen(route = "home_page")
-    data object Profile : Screen(route = "profile_page")
-    data object Settings : Screen(route = "settings_page")
+    object Home : Screen("home")
+    object Profile : Screen("profile")
+    object Settings : Screen("settings")
+    object Formulario : Screen("formulario")
+    object Resultado : Screen("resultado/{nombre}/{correo}/{direccion}") {
+        fun createRoute(nombre: String, correo: String, direccion: String) =
+            "resultado/$nombre/$correo/$direccion"
+    }
 }

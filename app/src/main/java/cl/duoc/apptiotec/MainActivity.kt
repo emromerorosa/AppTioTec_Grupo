@@ -4,32 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import cl.duoc.apptiotec.data.UserPreferences
-import cl.duoc.apptiotec.ui.FormularioScreen
-import cl.duoc.apptiotec.viewmodel.UsuarioViewModel
+import cl.duoc.apptiotec.ui.PerfilScreen
+import cl.duoc.apptiotec.viewmodel.PerfilViewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val perfilViewModel: PerfilViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        val userPreferences = UserPreferences(applicationContext)
-
-        val usuarioViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return UsuarioViewModel(userPreferences) as T
-                }
-            }
-        )[UsuarioViewModel::class.java]
 
         setContent {
             MaterialTheme {
@@ -37,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    FormularioScreen(viewModel = usuarioViewModel)
+                    PerfilScreen(viewModel = perfilViewModel)
                 }
             }
         }

@@ -53,6 +53,9 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
+    // Preferences DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
     // Window Size Classes: sirve para saber si la pantalla es Compacta, Mediana o Expandida
     implementation("androidx.compose.material3:material3-window-size-class")
 
@@ -62,4 +65,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("androidx.compose.material:material-icons-extended:1.6.0")
+
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+
+
 }

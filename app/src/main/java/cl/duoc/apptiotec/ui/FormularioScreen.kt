@@ -1,116 +1,112 @@
 package cl.duoc.apptiotec.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import cl.duoc.apptiotec.viewmodel.UsuarioViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioScreen(
     viewModel: UsuarioViewModel,
-    onNavigateToResult: (nombre: String, correo: String, direccion: String) -> Unit
+    onNavegarResultado: () -> Unit = {}
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    // Escuchar la persistencia en tiempo real desde DataStore
+    val nombreGuardado by viewModel.nombreGuardado.collectAsState()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Registro de Usuario") }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = "Formulario de Registro (Guía 12)",
+            style = MaterialTheme.typography.headlineSmall
+        )
+
+        // Campo Nombre
+        OutlinedTextField(
+            value = viewModel.nombre,
+            onValueChange = { viewModel.nombre = it },
+            label = { Text("Nombre Completo") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+
+        // Campo Correo
+        OutlinedTextField(
+            value = viewModel.correo,
+            onValueChange = { viewModel.correo = it },
+            label = { Text("Correo Electrónico") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+
+        // Campo Dirección
+        OutlinedTextField(
+            value = viewModel.direccion,
+            onValueChange = { viewModel.direccion = it },
+            label = { Text("Dirección") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+
+        // PARTE 3: Animación reactiva basada en derivedStateOf
+        AnimatedVisibility(
+            visible = viewModel.esFormularioValido,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically()
+        ) {
+            Text(
+                text = "✓ Formulario válido. Puedes guardar la información.",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Botón de guardado
+        Button(
+            onClick = {
+                viewModel.guardarUsuario()
+                onNavegarResultado()
+            },
+            enabled = viewModel.esFormularioValido,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            // Campo Nombre
-            OutlinedTextField(
-                value = uiState.nombre,
-                onValueChange = { viewModel.onNombreChanged(it) },
-                label = { Text("Nombre Completo") },
-                isError = uiState.errores.nombre != null,
-                supportingText = {
-                    uiState.errores.nombre?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-                },
-                modifier = Modifier.fillMaxWidth()
+            Text("Guardar Usuario")
+        }
+
+        // PARTE 2: Animación para mostrar el dato guardado en local (DataStore)
+        AnimatedVisibility(
+            visible = nombreGuardado.isNotBlank(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Text(
+                text = "Usuario guardado en DataStore: $nombreGuardado",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.secondary
             )
-
-            // Campo Correo
-            OutlinedTextField(
-                value = uiState.correo,
-                onValueChange = { viewModel.onCorreoChanged(it) },
-                label = { Text("Correo Electrónico") },
-                isError = uiState.errores.correo != null,
-                supportingText = {
-                    uiState.errores.correo?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            // Campo Contraseña
-            OutlinedTextField(
-                value = uiState.clave,
-                onValueChange = { viewModel.onClaveChanged(it) },
-                label = { Text("Contraseña") },
-                visualTransformation = PasswordVisualTransformation(),
-                isError = uiState.errores.clave != null,
-                supportingText = {
-                    uiState.errores.clave?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            // Campo Dirección
-            OutlinedTextField(
-                value = uiState.direccion,
-                onValueChange = { viewModel.onDireccionChanged(it) },
-                label = { Text("Dirección") },
-                isError = uiState.errores.direccion != null,
-                supportingText = {
-                    uiState.errores.direccion?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            // Checkbox Términos y Condiciones
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Checkbox(
-                    checked = uiState.aceptaTerminos,
-                    onCheckedChange = { viewModel.onAceptaTerminosChanged(it) }
-                )
-                Text("Acepto los términos y condiciones")
-            }
-
-            // Botón de Envío
-            Button(
-                onClick = {
-                    if (viewModel.validarFormulario()) {
-                        onNavigateToResult(uiState.nombre, uiState.correo, uiState.direccion)
-                    }
-                },
-                enabled = uiState.aceptaTerminos,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            ) {
-                Text("Registrar")
-            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package cl.duoc.apptiotec.ui
+package cl.duoc.apptiotec.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

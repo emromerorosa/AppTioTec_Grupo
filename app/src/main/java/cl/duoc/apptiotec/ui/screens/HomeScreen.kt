@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.sp
 fun HomeScreen(
     onComenzarEvaluacion: () -> Unit = {},
     onVerHistorial: () -> Unit = {},
-    onIrConfiguracion: () -> Unit = {}
+    onIrConfiguracion: () -> Unit = {},
+    onIrChecklist: () -> Unit = {},
+    onIrPosts: () -> Unit = {} // Nuevo parámetro: lleva a la pantalla de posts
 ) {
     Scaffold(
         topBar = {
@@ -72,6 +74,42 @@ fun HomeScreen(
             ) {
                 Text(
                     text = "Comenzar evaluación",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón: Checklist Preventivo (API REST)
+            OutlinedButton(
+                onClick = { onIrChecklist() },
+                shape = RoundedCornerShape(24.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF6750A4)),
+                modifier = Modifier
+                    .width(240.dp)
+                    .height(48.dp)
+            ) {
+                Text(
+                    text = "Checklist Preventivo 🛡️",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // NUEVO BOTÓN: Posts (API REST)
+            OutlinedButton(
+                onClick = { onIrPosts() },
+                shape = RoundedCornerShape(24.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF6750A4)),
+                modifier = Modifier
+                    .width(240.dp)
+                    .height(48.dp)
+            ) {
+                Text(
+                    text = "Ver posts",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium
                 )

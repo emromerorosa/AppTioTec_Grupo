@@ -5,6 +5,7 @@ sealed class Screen(val route: String) {
     object Profile : Screen("profile")
     object Settings : Screen("settings")
     object Formulario : Screen("formulario")
+    object Checklist : Screen("checklist") // <--- AGREGA ESTA LÍNEA
     object Resultado : Screen("resultado/{nombre}/{correo}/{direccion}") {
         fun createRoute(nombre: String, correo: String, direccion: String) =
             "resultado/$nombre/$correo/$direccion"

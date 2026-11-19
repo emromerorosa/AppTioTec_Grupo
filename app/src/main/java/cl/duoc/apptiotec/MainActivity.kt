@@ -9,14 +9,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import cl.duoc.apptiotec.ui.screens.ChecklistScreen
 import cl.duoc.apptiotec.ui.screens.HomeScreen
 import cl.duoc.apptiotec.ui.screens.PerfilScreen
 import cl.duoc.apptiotec.ui.screens.FormularioScreen
 import cl.duoc.apptiotec.ui.screens.HistorialScreen
+import cl.duoc.apptiotec.ui.screens.PostScreen
 import cl.duoc.apptiotec.viewmodel.PerfilViewModel
+import cl.duoc.apptiotec.viewmodel.PostViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -43,7 +47,9 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 onComenzarEvaluacion = { navController.navigate("evaluacion") },
                                 onVerHistorial = { navController.navigate("historial") },
-                                onIrConfiguracion = { navController.navigate("perfil") }
+                                onIrConfiguracion = { navController.navigate("perfil") },
+                                onIrChecklist = { navController.navigate("checklist") },
+                                onIrPosts = { navController.navigate("posts") }
                             )
                         }
 
@@ -68,6 +74,17 @@ class MainActivity : ComponentActivity() {
                                 onVolver = { navController.popBackStack() },
                                 onEnviarExitoso = { navController.popBackStack() }
                             )
+                        }
+
+                        // Pantalla API REST (Checklist)
+                        composable("checklist") {
+                            ChecklistScreen()
+                        }
+
+                        // Pantalla de Posts (API REST)
+                        composable("posts") {
+                            val postViewModel: PostViewModel = viewModel()
+                            PostScreen(viewModel = postViewModel)
                         }
                     }
                 }

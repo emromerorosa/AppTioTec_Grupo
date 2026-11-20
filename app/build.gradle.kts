@@ -71,6 +71,10 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-
+    // --- Guía 15: pruebas unitarias ---
+    // MockK: crea "dobles" falsos de los repositorios para probar sin internet
+    testImplementation("io.mockk:mockk:1.13.8")
+    // Herramientas para probar coroutines (runTest, Dispatchers de prueba)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
 }

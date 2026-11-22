@@ -19,13 +19,10 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class ChecklistViewModelTest {
 
-    // Repositorio falso. "relaxed" = las funciones que no configuremos
-    // (crear, actualizar, eliminar) responden sin error.
     private lateinit var repository: TareaRepository
 
-    // 6 tareas falsas, como las que manda la API
     private val tareasFalsas = (1..6).map {
-        TareaPreventiva(id = it, title = "title $it", completed = false)
+        TareaPreventiva(id = it, title = "Tarea preventiva $it", completed = false)
     }
 
     @Before
@@ -41,14 +38,11 @@ class ChecklistViewModelTest {
     }
 
     @Test
-    fun `al iniciar carga 6 tareas en espanol y el progreso es 0`() {
+    fun `al iniciar carga las tareas del microservicio y el progreso es 0`() {
         val viewModel = ChecklistViewModel(repository)
 
         assertEquals(6, viewModel.tareas.value.size)
-        assertEquals(
-            "Nunca entregar claves ni códigos que lleguen por mensaje de texto",
-            viewModel.tareas.value[0].title
-        )
+        assertEquals("Tarea preventiva 1", viewModel.tareas.value[0].title)
         assertEquals(0f, viewModel.progreso.value, 0.001f)
     }
 
@@ -73,13 +67,20 @@ class ChecklistViewModelTest {
     }
 
     @Test
-    fun `al agregar una tarea el id es el maximo mas 1`() {
-        val viewModel = ChecklistViewModel(repository)
+    fun `al agregar una tarea el microservicio devuelve la tarea con su id`() {
+        val tareaCreada = TareaPreventiva(
+            id = 7,
+            title = "Cambiar mi clave del correo",
+            completed = false
+        )
+        coEvery { repository.crearTarea(any()) } returns tareaCreada
 
+        val viewModel = ChecklistViewModel(repository)
         viewModel.agregarTarea("Cambiar mi clave del correo")
 
         assertEquals(7, viewModel.tareas.value.size)
         assertEquals(7, viewModel.tareas.value.last().id)
+        assertEquals("Cambiar mi clave del correo", viewModel.tareas.value.last().title)
     }
 
     @Test

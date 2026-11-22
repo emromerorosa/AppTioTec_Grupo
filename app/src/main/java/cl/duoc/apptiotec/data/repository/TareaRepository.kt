@@ -1,13 +1,13 @@
 package cl.duoc.apptiotec.data.repository
 
-import cl.duoc.apptiotec.data.remote.ApiService
 import cl.duoc.apptiotec.data.remote.RetrofitInstance
+import cl.duoc.apptiotec.data.remote.TareaApiService
 import cl.duoc.apptiotec.model.TareaPreventiva
 
 // La API llega como parámetro para poder reemplazarla por una falsa en las pruebas.
-// Por defecto usa la real, así la app funciona igual que antes.
+// Por defecto usa la conexión al microservicio propio (Spring Boot).
 class TareaRepository(
-    private val api: ApiService = RetrofitInstance.api
+    private val api: TareaApiService = RetrofitInstance.tareaApi
 ) {
     suspend fun obtenerTareas(): List<TareaPreventiva> = api.getTareas()
     suspend fun crearTarea(tarea: TareaPreventiva) = api.crearTarea(tarea)

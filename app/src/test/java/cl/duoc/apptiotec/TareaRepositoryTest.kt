@@ -1,6 +1,6 @@
 package cl.duoc.apptiotec
 
-import cl.duoc.apptiotec.data.remote.ApiService
+import cl.duoc.apptiotec.data.remote.TareaApiService
 import cl.duoc.apptiotec.data.repository.TareaRepository
 import cl.duoc.apptiotec.model.TareaPreventiva
 import io.mockk.coEvery
@@ -13,8 +13,8 @@ import org.junit.Test
 
 class TareaRepositoryTest {
 
-    // API falsa: no usa internet
-    private lateinit var api: ApiService
+    // API falsa del microservicio: no usa internet
+    private lateinit var api: TareaApiService
     private lateinit var repository: TareaRepository
 
     private val tarea = TareaPreventiva(id = 5, title = "Probar", completed = false)

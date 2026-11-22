@@ -8,10 +8,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-// ViewModel que guarda la lista de posts que llegan de la API
-class PostViewModel : ViewModel() {
-
-    private val repository = PostRepository()
+// ViewModel que guarda la lista de posts que llegan de la API.
+// El repositorio llega como parámetro para poder reemplazarlo por uno falso en las pruebas.
+// Por defecto usa el real, así la app funciona igual que antes.
+class PostViewModel(
+    private val repository: PostRepository = PostRepository()
+) : ViewModel() {
 
     // Títulos en español: reemplazan los textos de relleno de la API
     private val titulosEnEspanol = listOf(

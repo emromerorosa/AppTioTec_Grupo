@@ -8,8 +8,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class ChecklistViewModel : ViewModel() {
-    private val repository = TareaRepository()
+// El repositorio llega como parámetro para poder reemplazarlo por uno falso en las pruebas.
+// Por defecto usa el real, así la app funciona igual que antes.
+class ChecklistViewModel(
+    private val repository: TareaRepository = TareaRepository()
+) : ViewModel() {
 
     private val _tareas = MutableStateFlow<List<TareaPreventiva>>(emptyList())
     val tareas: StateFlow<List<TareaPreventiva>> = _tareas

@@ -42,3 +42,27 @@ La aplicación se comunica con el microservicio **`tiotec-tareas`** desplegado p
 1. Clonar el repositorio:
    ```bash
    git clone https://github.com/emromerorosa/AppTioTec_Grupo.git
+
+2. Abrir la carpeta del proyecto (`AppTioTec_clon`) en **Android Studio**.
+3. Esperar a que Gradle descargue las dependencias y sincronice el proyecto automáticamente.
+4. Verificar la URL base del servicio en la configuración de Retrofit si se ejecuta en un dispositivo físico.
+5. Presionar **Run (`Shift + F10`)** para compilar e instalar la aplicación en el emulador o dispositivo.
+
+---
+
+## 5. Pruebas Unitarias y Cobertura Lógica
+Se implementaron pruebas unitarias sobre la capa de lógica de negocio (`ChecklistViewModelTest`) utilizando **JUnit 4**, **MockK** (para simular el repositorio sin depender de conexión a internet) y **Kotlinx Coroutines Test**, alcanzando un **95% de cobertura lógica** en el `ViewModel`.
+
+### Evidencia de Ejecución de Tests
+![Ejecución de Pruebas Unitarias](capturas/tests-ok.png)
+
+---
+
+## 6. APK Firmado y Configuración de Despliegue
+Se generó el archivo keystore **`tiotec-key.jks`** y se configuró el bloque `signingConfigs` para la variante `release` dentro de `app/build.gradle.kts`, generando el ejecutable listo para distribución (`app-release.apk`).
+
+- **Keystore:** `tiotec-key.jks` (Alias: `key0`)
+- **Ubicación del APK firmado:** `app/release/app-release.apk`
+
+### Evidencia de Artefactos Generados
+![APK Firmado y Keystore](capturas/apk-firmado.png)

@@ -5,8 +5,8 @@ Aplicación móvil nativa desarrollada en Kotlin y Jetpack Compose para la gesti
 ---
 
 ## 1. Integrantes del Grupo
-- **[Rosa Estefania Meza Romero]** – Desarrollo Android / UI Compose / Pruebas Unitarias
-- **[Josue Andres Vera Sepulveda ]** – Arquitectura MVVM / Integración API / Despliegue
+- **Rosa Estefania Meza Romero** – Desarrollo Android / UI Compose / Pruebas Unitarias
+- **Josue Andres Vera Sepulveda** – Arquitectura MVVM / Integración API / Despliegue
 
 ---
 
@@ -22,7 +22,7 @@ Aplicación móvil nativa desarrollada en Kotlin y Jetpack Compose para la gesti
 ## 3. Endpoints Utilizados
 La aplicación se comunica con el microservicio **`tiotec-tareas`** desplegado para la gestión remota de registros:
 
-- **Base URL:** `http://10.0.2.2:8080/`
+- **Base URL:** `[http://10.0.2.2:8080/](http://10.0.2.2:8080/)`
 - **Endpoints principales:**
     - `GET /api/tareas` – Obtiene el listado completo de tareas y checklists preventivos disponibles.
     - `POST /api/tareas` – Registra una nueva tarea o envía el resultado de una inspección completada.
@@ -41,4 +41,4 @@ La aplicación se comunica con el microservicio **`tiotec-tareas`** desplegado p
 ### Pasos para Ejecutar el Proyecto
 1. Clonar el repositorio:
    ```bash
-   git clone [https://github.com/emromerorosa/AppTioTec_Grupo.git]
+   git clone https://github.com/emromerorosa/AppTioTec_Grupo.git

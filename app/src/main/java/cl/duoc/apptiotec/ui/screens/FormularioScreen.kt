@@ -126,14 +126,27 @@ fun FormularioScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Aviso mientras falten preguntas por responder
+            if (respondidas < totalPreguntas) {
+                Text(
+                    text = "Responde todas las preguntas para poder enviar (faltan ${totalPreguntas - respondidas}).",
+                    fontSize = 14.sp,
+                    color = Color(0xFFB3261E),
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+
             Button(
                 onClick = {
+                    // Guarda la evaluación en el historial antes de avisar
+                    HistorialEvaluaciones.agregar(respondidas, totalPreguntas)
                     Toast.makeText(context, "Evaluación enviada con éxito", Toast.LENGTH_SHORT).show()
                     onEnviarExitoso()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6750A4)),
                 shape = RoundedCornerShape(24.dp),
-                enabled = respondidas > 0,
+                // El botón solo se activa cuando están todas las preguntas respondidas
+                enabled = respondidas == totalPreguntas,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)

@@ -28,11 +28,8 @@ data class EvaluacionHistorial(
 fun HistorialScreen(
     onVolver: () -> Unit = {}
 ) {
-    val historial = listOf(
-        EvaluacionHistorial(1, "28 Oct 2026", "10/10 Respondidas", "Completado"),
-        EvaluacionHistorial(2, "15 Oct 2026", "8/10 Respondidas", "Completado"),
-        EvaluacionHistorial(3, "01 Oct 2026", "10/10 Respondidas", "Completado")
-    )
+    // Ahora el historial viene de la lista compartida, donde se guardan las evaluaciones enviadas
+    val historial = HistorialEvaluaciones.lista
 
     Scaffold(
         topBar = {

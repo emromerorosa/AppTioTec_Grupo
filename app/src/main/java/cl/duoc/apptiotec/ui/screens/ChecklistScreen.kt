@@ -17,6 +17,8 @@ import cl.duoc.apptiotec.viewmodel.ChecklistViewModel
 fun ChecklistScreen(viewModel: ChecklistViewModel = viewModel()) {
     val tareas by viewModel.tareas.collectAsState()
     val progreso by viewModel.progreso.collectAsState()
+    // Mensaje de error que viene del ViewModel (null = no hay error)
+    val mensajeError by viewModel.mensajeError.collectAsState()
     var textoNuevaTarea by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
@@ -35,6 +37,29 @@ fun ChecklistScreen(viewModel: ChecklistViewModel = viewModel()) {
                     progress = { progreso },
                     modifier = Modifier.fillMaxWidth().height(8.dp)
                 )
+            }
+        }
+
+        // Tarjeta de error: solo se muestra cuando algo falló con el servidor
+        mensajeError?.let { mensaje ->
+            Spacer(modifier = Modifier.height(8.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+            ) {
+                Row(
+                    modifier = Modifier.padding(12.dp).fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = mensaje,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        modifier = Modifier.weight(1f)
+                    )
+                    TextButton(onClick = { viewModel.limpiarError() }) {
+                        Text("Cerrar")
+                    }
+                }
             }
         }
 

@@ -9,7 +9,7 @@ object RetrofitInstance {
 
     // Microservicio propio (Spring Boot): se usa para las tareas del checklist.
     // 10.0.2.2 es la dirección que usa el emulador para llegar al localhost del computador.
-    private const val BASE_URL_TAREAS = "http://10.0.2.2:8080/"
+    private const val BASE_URL_TAREAS = "http://172.20.10.6:8080/"
 
     // Conexión a la API externa (posts)
     val api: ApiService by lazy {

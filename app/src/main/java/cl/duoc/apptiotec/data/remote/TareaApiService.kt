@@ -1,6 +1,7 @@
 package cl.duoc.apptiotec.data.remote
 
 import cl.duoc.apptiotec.model.TareaPreventiva
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -8,7 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-// Rutas del microservicio propio (Spring Boot): http://10.0.2.2:8080/tareas
+// Rutas del microservicio propio (Spring Boot): http://IP-DEL-COMPUTADOR:8080/tareas
 interface TareaApiService {
 
     // GET /tareas -> lista todas las tareas
@@ -23,7 +24,8 @@ interface TareaApiService {
     @PUT("tareas/{id}")
     suspend fun actualizarTarea(@Path("id") id: Int, @Body tarea: TareaPreventiva): TareaPreventiva
 
-    // DELETE /tareas/{id} -> borra una tarea
+    // DELETE /tareas/{id} -> borra una tarea.
+    // El servidor responde sin contenido (204), por eso devuelve Response<Unit>
     @DELETE("tareas/{id}")
-    suspend fun eliminarTarea(@Path("id") id: Int)
+    suspend fun eliminarTarea(@Path("id") id: Int): Response<Unit>
 }

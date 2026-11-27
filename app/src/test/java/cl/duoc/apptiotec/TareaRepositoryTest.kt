@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import retrofit2.Response
 
 class TareaRepositoryTest {
 
@@ -54,6 +55,9 @@ class TareaRepositoryTest {
 
     @Test
     fun `eliminarTarea llama a la API con el id`() = runTest {
+        // El servidor responde con éxito y sin contenido (204)
+        coEvery { api.eliminarTarea(5) } returns Response.success(Unit)
+
         repository.eliminarTarea(5)
 
         coVerify { api.eliminarTarea(5) }
